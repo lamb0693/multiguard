@@ -195,6 +195,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        //Add my Provider
+        App\Providers\MyGlobalFunctionServiceProvider::class,
+
     ],
 
     /*

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('User Dashboard') }}
+            {{ __('Seller Dashboard') }}
         </h2>
     </x-slot>
 
@@ -12,8 +12,8 @@
                     You're logged in!
                 </div>
                 <div class="pl-5 py-5 text-2xl">
-                    user name : {{Auth::user()->name}}<BR>
-                    email : {{Auth::user()->email}}<BR>
+                    user name : {{Auth::guard('seller')->user()->name}}<BR>
+                    email : {{Auth::guard('seller')->user()->email}}<BR>
                     guard : {{getActiveGuard()}}
                 </div>
             </div>

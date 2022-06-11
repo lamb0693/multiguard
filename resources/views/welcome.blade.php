@@ -23,28 +23,38 @@
         </style>
     </head>
     <body class="antialiased">
+
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
             @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
-                        <form method="POST" action="{{ route('logout') }}">
+                    @if(GetActiveGuard())
+                        <a href="{{ Auth::check()? url('/dashboard') : url('/seller/dashboard')}}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
+                        <form method="POST" action="{{ Auth::check() ? route('logout') : route('seller.logout')}}">
                             @csrf
-                            <button type="submit" class="bg-red-100">{{Auth::user()->name}} logout</button>
+                            <button type="submit" class="bg-red-100">{{Auth::check() ? Auth::user()->name : Auth::guard('seller')->user()->name}} logout</button>
                         </form>
                     @else
                         <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
+                        <a href="{{ route('seller.login') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Log in:Seller</a>
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
-                        @endif
-                    @endauth
+                        <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register:User</a>
+                        <a href="{{ route('seller.register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register:Seller</a>
+                    @endif
                 </div>
             @endif
 
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8 text-3xl">
-                <div class="text-green-400 my-5">
-                    Welcome Page
+                <div class="text-blue-800 my-5">
+                    <div class="pl-5 py-5 text-2xl">
+                        Welcome Page <BR>
+                        @if( GetActiveGuard() )
+                            guard : {{getActiveGuard()}} <BR>
+                            user name : {{Auth::guard(getActiveGuard())->user()->name}}<BR>
+                            email : {{Auth::guard(getActiveGuard())->user()->email}}<BR>
+                        @else
+                            Login 되지 않은 상태 입니다
+                        @endif
+                    </div>
                 </div>
                 <div class="flex bg-blue-100 my-5">
                     <div class="flex-none w-40">이름</div>

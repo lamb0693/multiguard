@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\Seller\AuthenticatedSellerSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -9,6 +10,8 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\Seller\RegisteredSellerController;
+
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -32,9 +35,21 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
                 ->name('password.update');
+
+    // for Sellers
+    Route::get('seller/register', [RegisteredSellerController::class, 'create'])
+            ->name('seller.register');
+
+    Route::post('seller/register', [RegisteredSellerController::class, 'store']);
+
+    Route::get('seller/login', [AuthenticatedSellerSessionController::class, 'create'])
+    ->name('seller.login');
+
+    Route::post('seller/login', [AuthenticatedSellerSessionController::class, 'store']);
+
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth:web,seller'])->group(function () {
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
                 ->name('verification.notice');
 
@@ -51,6 +66,24 @@ Route::middleware('auth')->group(function () {
 
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
+});
+
+// for user only
+
+Route::middleware(['auth:web'])->group(function () {
+
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
+
 });
+
+
+// for Sellers only
+
+Route::middleware(['auth:seller'])->group(function () {
+
+    Route::post('seller/logout', [AuthenticatedSellerSessionController::class, 'destroy'])
+                ->name('seller.logout');
+
+});
+
