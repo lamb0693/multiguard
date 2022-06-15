@@ -11,6 +11,8 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\Seller\RegisteredSellerController;
+use App\Http\Controllers\Auth\Seller\SellerPasswordResetLinkController;
+use App\Http\Controllers\Auth\Seller\NewSellerPasswordController;
 
 
 Route::middleware('guest')->group(function () {
@@ -46,6 +48,18 @@ Route::middleware('guest')->group(function () {
     ->name('seller.login');
 
     Route::post('seller/login', [AuthenticatedSellerSessionController::class, 'store']);
+
+    Route::get('seller/forgot-password', [SellerPasswordResetLinkController::class, 'create'])
+    ->name('seller.password.request');
+
+    Route::post('seller/forgot-password', [SellerPasswordResetLinkController::class, 'store'])
+    ->name('seller.password.email');
+
+    Route::get('seller/reset-password/{token}', [NewSellerPasswordController::class, 'create'])
+    ->name('seller.password.reset');
+
+    Route::post('seller/reset-password', [NewSellerPasswordController::class, 'store'])
+    ->name('seller.password.update');
 
 });
 
