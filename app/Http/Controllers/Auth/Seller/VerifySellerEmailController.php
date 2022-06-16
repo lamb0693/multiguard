@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth\Seller;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
@@ -8,7 +8,7 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Log;
 
-class VerifyEmailController extends Controller
+class VerifySellerEmailController extends Controller
 {
     /**
      * Mark the authenticated user's email address as verified.
@@ -18,7 +18,7 @@ class VerifyEmailController extends Controller
      */
     public function __invoke(EmailVerificationRequest $request)
     {
-        Log::info('into the VerifySellerEmailController <- pass through guard-default');
+        Log::info('into the VerifySellerEmailController <- pass through guard-seller');
         if ($request->user()->hasVerifiedEmail()) {
             return redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
         }

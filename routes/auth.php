@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\Seller\RegisteredSellerController;
 use App\Http\Controllers\Auth\Seller\SellerPasswordResetLinkController;
 use App\Http\Controllers\Auth\Seller\NewSellerPasswordController;
+use App\Http\Controllers\Auth\Seller\VerifySellerEmailController;
+use App\Http\Controllers\Auth\Seller\SellerEmailVerificationNotificationController;
+use App\Http\Controllers\Auth\Seller\SellerEmailVerificationPromptController;
 
 
 Route::middleware('guest')->group(function () {
@@ -63,17 +66,7 @@ Route::middleware('guest')->group(function () {
 
 });
 
-Route::middleware(['auth:web,seller'])->group(function () {
-    Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
-                ->name('verification.notice');
-
-    Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-                ->middleware(['signed', 'throttle:6,1'])
-                ->name('verification.verify');
-
-    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-                ->middleware('throttle:6,1')
-                ->name('verification.send');
+Route::middleware(['auth,auth'])->group(function () {
 
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
                 ->name('password.confirm');
@@ -86,9 +79,20 @@ Route::middleware(['auth:web,seller'])->group(function () {
 
 Route::middleware(['auth:web'])->group(function () {
 
+    Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
+            ->name('verification.notice');
+
+    Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+            ->middleware(['signed', 'throttle:6,1'])
+            ->name('verification.verify');
+
+
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+            ->middleware('throttle:6,1')
+            ->name('verification.send');
+
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
-
 });
 
 
@@ -99,5 +103,15 @@ Route::middleware(['auth:seller'])->group(function () {
     Route::post('seller/logout', [AuthenticatedSellerSessionController::class, 'destroy'])
                 ->name('seller.logout');
 
+    Route::get('verify-email', [SellerEmailVerificationPromptController::class, '__invoke'])
+                ->name('verification.notice');
+
+    Route::get('seller/verify-email/{id}/{hash}', [VerifySellerEmailController::class, '__invoke'])
+                ->middleware(['signed', 'throttle:6,1'])
+                ->name('seller.verification.verify');
+
+    Route::post('email/verification-notification', [SellerEmailVerificationNotificationController::class, 'store'])
+                ->middleware('throttle:6,1')
+                ->name('verification.send');
 });
 

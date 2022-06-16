@@ -10,8 +10,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Log;
 use App\Notifications\ResetSellerPasswordNotification;
+use App\Notifications\RegisteredSellerMailNotification;
 
-class Seller extends Authenticatable
+class Seller extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -52,5 +53,11 @@ class Seller extends Authenticatable
         $url = 'http://192.168.0.7:8000/seller/reset-password/'.$token.'?email='.$this->email;
 
         $this->notify(new ResetSellerPasswordNotification($url));
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        //$this->notify(new VerifyEmail);
+        $this->notify(new RegisteredSellerMailNotification);
     }
 }

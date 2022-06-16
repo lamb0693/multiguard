@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use App\Events\RegisterdSellerEvent;
 
 class RegisteredSellerController extends Controller
 {
@@ -36,7 +37,7 @@ class RegisteredSellerController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:sellers'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -46,10 +47,11 @@ class RegisteredSellerController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($seller));
+        //event(new Registered($seller));
+        event(new RegisterdSellerEvent($seller));
 
         Auth::guard('seller')->login($seller);
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect(RouteServiceProvider::SELLER_HOME);
     }
 }

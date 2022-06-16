@@ -19,8 +19,9 @@ Route::get('/', [WelcomeController::class, 'welcome'] )->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/seller/dashboard', [SellerController::class, 'dashboard'])->middleware(['auth:seller'])->name('seller.dashboard');
+Route::get('/seller/dashboard', [SellerController::class, 'dashboard'])
+    ->middleware(['auth:seller', 'verified'])->name('seller.dashboard');
 
 require __DIR__.'/auth.php';
