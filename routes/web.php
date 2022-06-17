@@ -22,6 +22,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/seller/dashboard', [SellerController::class, 'dashboard'])
-    ->middleware(['auth:seller', 'verified'])->name('seller.dashboard');
+    ->middleware(['auth:seller', 'verified.seller'])->name('seller.dashboard');
 
 require __DIR__.'/auth.php';

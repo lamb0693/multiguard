@@ -18,6 +18,6 @@ class SellerEmailVerificationPromptController extends Controller
     {
         return $request->user()->hasVerifiedEmail()
                     ? redirect()->intended(RouteServiceProvider::SELLER_HOME)
-                    : view('auth.verify-email');
+                    : view('auth.seller.verify-email');
     }
 }

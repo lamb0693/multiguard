@@ -103,15 +103,15 @@ Route::middleware(['auth:seller'])->group(function () {
     Route::post('seller/logout', [AuthenticatedSellerSessionController::class, 'destroy'])
                 ->name('seller.logout');
 
-    Route::get('verify-email', [SellerEmailVerificationPromptController::class, '__invoke'])
-                ->name('verification.notice');
+    Route::get('seller/verify-email', [SellerEmailVerificationPromptController::class, '__invoke'])
+                ->name('seller.verification.notice');
 
     Route::get('seller/verify-email/{id}/{hash}', [VerifySellerEmailController::class, '__invoke'])
                 ->middleware(['signed', 'throttle:6,1'])
                 ->name('seller.verification.verify');
 
-    Route::post('email/verification-notification', [SellerEmailVerificationNotificationController::class, 'store'])
+    Route::post('seller/email/verification-notification', [SellerEmailVerificationNotificationController::class, 'store'])
                 ->middleware('throttle:6,1')
-                ->name('verification.send');
+                ->name('seller.verification.send');
 });
 
