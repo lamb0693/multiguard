@@ -24,4 +24,12 @@ Route::get('/dashboard', function () {
 Route::get('/seller/dashboard', [SellerController::class, 'dashboard'])
     ->middleware(['auth:seller', 'verified.seller'])->name('seller.dashboard');
 
+Route::get('/user/info', function () {
+    return view('user_need_confirm');
+})->middleware(['auth', 'verified', 'password.confirm'])->name('user.info');
+
+Route::get('/seller/info', function () {
+    return view('seller_need_confirm');
+})->middleware(['auth:seller', 'verified', 'seller.password.confirm'])->name('seller.info');
+
 require __DIR__.'/auth.php';

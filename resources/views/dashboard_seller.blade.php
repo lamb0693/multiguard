@@ -18,7 +18,8 @@
                 </div>
             </div>
             <div class="p-6 sm:rounded-lg bg-yellow-100 border-b border-gray-200 text-2xl text-blue-400">
-                <a href={{route('welcome')}}>Welcome Page로</a>
+                <a href={{route('welcome')}}>Welcome Page로</a><BR><BR>
+                <a href={{route('seller.info')}}>개인 정보 page로</a>
             </div>
             <div class="my-5 bg-gray-100">
                 판매 상품들

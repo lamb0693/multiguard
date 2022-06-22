@@ -16,6 +16,7 @@ use App\Http\Controllers\Auth\Seller\NewSellerPasswordController;
 use App\Http\Controllers\Auth\Seller\VerifySellerEmailController;
 use App\Http\Controllers\Auth\Seller\SellerEmailVerificationNotificationController;
 use App\Http\Controllers\Auth\Seller\SellerEmailVerificationPromptController;
+use App\Http\Controllers\Auth\Seller\ConfirmableSellerPasswordController;
 
 
 Route::middleware('guest')->group(function () {
@@ -66,14 +67,6 @@ Route::middleware('guest')->group(function () {
 
 });
 
-Route::middleware(['auth,auth'])->group(function () {
-
-    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
-                ->name('password.confirm');
-
-    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
-
-});
 
 // for user only
 
@@ -86,13 +79,17 @@ Route::middleware(['auth:web'])->group(function () {
             ->middleware(['signed', 'throttle:6,1'])
             ->name('verification.verify');
 
-
     Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
             ->middleware('throttle:6,1')
             ->name('verification.send');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-                ->name('logout');
+            ->name('logout');
+
+    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
+            ->name('password.confirm');
+
+    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 });
 
 
@@ -113,5 +110,10 @@ Route::middleware(['auth:seller'])->group(function () {
     Route::post('seller/email/verification-notification', [SellerEmailVerificationNotificationController::class, 'store'])
                 ->middleware('throttle:6,1')
                 ->name('seller.verification.send');
+
+    Route::get('/seller/confirm-password', [ConfirmableSellerPasswordController::class, 'show'])
+            ->name('seller.password.confirm');
+
+    Route::post('/seller/confirm-password', [ConfirmableSellerPasswordController::class, 'store']);
 });
 
